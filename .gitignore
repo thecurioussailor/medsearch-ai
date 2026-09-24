@@ -1,0 +1,38 @@
+# --- Environment / secrets ---
+.env
+.env.*
+!.env.example
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- macOS ---
+.DS_Store
+
+# --- RAG / data artifacts ---
+data/processed/
+*.faiss
+*.index
+chroma/
+chroma.sqlite3
+qdrant_storage/
+*.pkl
+*.parquet
+*.npy
+
+# --- Logs & eval output ---
+*.log
+evaluation/results/
+
+# --- Editors ---
+.vscode/
+.idea/
