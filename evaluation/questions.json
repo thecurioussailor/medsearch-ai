@@ -1,0 +1,27 @@
+[
+  {
+    "id": "q1",
+    "question": "What are the risk factors for diabetes?",
+    "expected_pages": [61]
+  },
+  {
+    "id": "q2",
+    "question": "What are the global diabetes coverage targets?",
+    "expected_pages": [21]
+  },
+  {
+    "id": "q3",
+    "question": "How is diabetes prevalence monitored?",
+    "expected_pages": [42, 49]
+  },
+  {
+    "id": "q4",
+    "question": "What indicators measure diabetes service delivery?",
+    "expected_pages": [32, 33, 34, 35]
+  },
+  {
+    "id": "q5",
+    "question": "What indicators are used to monitor diabetes?",
+    "expected_pages": [6, 21, 32, 49, 61]
+  }
+]

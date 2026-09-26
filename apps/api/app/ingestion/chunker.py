@@ -24,6 +24,8 @@ def chunk_text(
     if not text.strip():
         return []
 
+    paragraphs = split_into_paragraphs(text)
+
     chunks = []
     current_chunk = ""
 
@@ -95,3 +97,41 @@ def chunk_text(
 
     return overlapped_chunks
 
+def create_chunks(
+    pages: list[dict],
+    document_id: str,
+    chunk_size: int = 2000,
+    overlap: int = 400,
+) -> list[dict]:
+    """
+    Create metadata-rich chunks from extracted PDF pages.
+    """
+
+    chunk_id = 0
+
+    chunks = []
+
+    for page in pages:
+        if not page["has_text"]:
+            continue
+
+        page_chunks = chunk_text(
+            page["text"],
+            chunk_size=chunk_size,
+            overlap=overlap,
+        )
+
+        for chunk_index, text in enumerate(page_chunks):
+            chunks.append(
+                {
+                    "chunk_id": f"{document_id}-{chunk_id:06d}",
+                    "document_id": document_id,
+                    "page_number": page["page_number"],
+                    "chunk_index": chunk_index,
+                    "text": text,
+                }
+            )
+            
+            chunk_id += 1
+
+    return chunks
