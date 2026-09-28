@@ -36,7 +36,7 @@
   },
   {
     "id": "q8",
-    "question": "What indicators measure diabetes service delivery?",
-    "expected_pages": [33, 34, 35]
+    "question": "Which indicators are included under the Governance subdomain of health system determinants?",
+    "expected_pages": [29]
   }
 ]
