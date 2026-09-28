@@ -1,4 +1,8 @@
 import re
+from app.ingestion.metadata import (
+    get_indicator_for_page,
+    get_indicator_metadata,
+)
 
 def split_into_paragraphs(text: str) -> list[str]:
     """
@@ -108,12 +112,19 @@ def create_chunks(
     """
 
     chunk_id = 0
-
     chunks = []
 
     for page in pages:
         if not page["has_text"]:
             continue
+
+        # Determine document metadata for this page.
+        indicator_number = get_indicator_for_page(page["page_number"])
+
+        metadata = {}
+
+        if indicator_number is not None:
+            metadata = get_indicator_metadata(indicator_number)
 
         page_chunks = chunk_text(
             page["text"],
@@ -128,12 +139,10 @@ def create_chunks(
                     "document_id": document_id,
                     "page_number": page["page_number"],
                     "chunk_index": chunk_index,
+
+                    **metadata,
+
                     "text": text,
-                    "embedding_text": (
-                        f"Document: {document_id}\n"
-                        f"Page: {page['page_number']}\n\n"
-                        f"{text}"
-                    ),
                 }
             )
             
