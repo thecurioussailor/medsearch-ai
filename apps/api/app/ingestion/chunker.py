@@ -129,6 +129,11 @@ def create_chunks(
                     "page_number": page["page_number"],
                     "chunk_index": chunk_index,
                     "text": text,
+                    "embedding_text": (
+                        f"Document: {document_id}\n"
+                        f"Page: {page['page_number']}\n\n"
+                        f"{text}"
+                    ),
                 }
             )
             
