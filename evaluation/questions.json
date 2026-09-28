@@ -16,12 +16,27 @@
   },
   {
     "id": "q4",
-    "question": "What indicators measure diabetes service delivery?",
-    "expected_pages": [32, 33, 34, 35]
+    "question": "What indicator assesses the existence of national guidelines for diabetes management?",
+    "expected_pages": [33]
   },
   {
     "id": "q5",
+    "question": "What indicator assesses the referral system for diabetes management?",
+    "expected_pages": [34]
+  },
+  {
+    "id": "q6",
+    "question": "What indicator measures inclusion of insulin and blood glucose self-monitoring in national health benefit packages?",
+    "expected_pages": [35]
+  },
+  {
+    "id": "q7",
     "question": "What indicators are used to monitor diabetes?",
     "expected_pages": [6, 21, 32, 49, 61]
+  },
+  {
+    "id": "q8",
+    "question": "What indicators measure diabetes service delivery?",
+    "expected_pages": [33, 34, 35]
   }
 ]
