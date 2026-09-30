@@ -11,6 +11,7 @@ from app.ingestion.chunker import create_chunks
 from app.retrieval.retriever import Retriever
 from app.retrieval.bm25 import BM25Retriever
 from app.retrieval.hybrid import HybridRetriever
+from app.retrieval.metadata_reranker import MetadataReranker
 
 
 PDF_PATH = REPO_ROOT / "data" / "raw" / "diabetes_monitoring_guidance.pdf"
@@ -53,6 +54,8 @@ def evaluate():
         bm25_retriever=bm25_retriever,
     )
 
+    metadata_reranker = MetadataReranker()
+
     dense_at_3 = 0
     dense_at_5 = 0
 
@@ -61,6 +64,9 @@ def evaluate():
 
     hybrid_at_3 = 0
     hybrid_at_5 = 0
+
+    metadata_at_3 = 0
+    metadata_at_5 = 0   
 
     print("\n" + "=" * 80)
     print("RETRIEVAL COMPARISON")
@@ -85,6 +91,12 @@ def evaluate():
             query=question["question"],
             chunks=chunks,
             vectors=vectors,
+            top_k=10,
+        )
+
+        metadata_results = metadata_reranker.rerank(
+            query=question["question"],
+            results=hybrid_results,
             top_k=5,
         )
 
@@ -118,6 +130,16 @@ def evaluate():
             for result in hybrid_results[:5]
         }
 
+        metadata_pages_3 = {
+            result["chunk"]["page_number"]
+            for result in metadata_results[:3]
+        }
+
+        metadata_pages_5 = {
+            result["chunk"]["page_number"]
+            for result in metadata_results[:5]
+        }
+
         dense_hit_3 = bool(expected_pages & dense_pages_3)
         dense_hit_5 = bool(expected_pages & dense_pages_5)
 
@@ -127,6 +149,9 @@ def evaluate():
         hybrid_hit_3 = bool(expected_pages & hybrid_pages_3)
         hybrid_hit_5 = bool(expected_pages & hybrid_pages_5)
 
+        metadata_hit_3 = bool(expected_pages & metadata_pages_3)
+        metadata_hit_5 = bool(expected_pages & metadata_pages_5)
+
         dense_at_3 += dense_hit_3
         dense_at_5 += dense_hit_5
 
@@ -135,6 +160,9 @@ def evaluate():
 
         hybrid_at_3 += hybrid_hit_3
         hybrid_at_5 += hybrid_hit_5
+
+        metadata_at_3 += metadata_hit_3
+        metadata_at_5 += metadata_hit_5
 
         print(f"\n{question['id']}: {question['question']}")
         print(f"Expected: {sorted(expected_pages)}")
@@ -155,6 +183,16 @@ def evaluate():
         )
 
         print(
+            f"Metadata @3: {sorted(metadata_pages_3)} "
+            f"{'PASS' if metadata_hit_3 else 'FAIL'}"
+        )
+
+        print(
+            f"Hybrid+Metadata @3: {sorted(metadata_pages_3)} "
+            f"{'PASS' if metadata_hit_3 else 'FAIL'}"
+        )
+
+        print(
             f"Dense  @5: {sorted(dense_pages_5)} "
             f"{'PASS' if dense_hit_5 else 'FAIL'}"
         )
@@ -167,6 +205,11 @@ def evaluate():
         print(
             f"Hybrid @5: {sorted(hybrid_pages_5)} "
             f"{'PASS' if hybrid_hit_5 else 'FAIL'}"
+        )
+
+        print(
+            f"Hybrid+Metadata @5: {sorted(metadata_pages_5)} "
+            f"{'PASS' if metadata_hit_5 else 'FAIL'}"
         )
 
     total = len(questions)
@@ -203,6 +246,16 @@ def evaluate():
     print(
         f"Hybrid Recall@5: "
         f"{hybrid_at_5}/{total} ({hybrid_at_5 / total:.2%})"
+    )
+
+    print(
+        f"Hybrid+Metadata Recall@3: "
+        f"{metadata_at_3}/{total} ({metadata_at_3 / total:.2%})"
+    )
+
+    print(
+        f"Hybrid+Metadata Recall@5: "
+        f"{metadata_at_5}/{total} ({metadata_at_5 / total:.2%})"
     )
 
 

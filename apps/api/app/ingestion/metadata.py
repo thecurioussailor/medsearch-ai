@@ -121,6 +121,13 @@ INDICATORS = {
     44: "Probability of premature mortality from noncommunicable diseases",
 }
 
+TAXONOMY_PAGES = {
+    29,
+    44,
+    61,
+    71,
+}
+
 
 INDICATOR_PAGE_RANGES = {
     1: (30, 30),
@@ -196,3 +203,15 @@ def get_indicator_for_page(page_number: int) -> int | None:
             return indicator_number
 
     return None
+
+
+def get_section_type(page_number: int) -> str:
+    if page_number in TAXONOMY_PAGES:
+        return "taxonomy"
+
+    indicator_number = get_indicator_for_page(page_number)
+
+    if indicator_number is not None:
+        return "indicator"
+
+    return "other"

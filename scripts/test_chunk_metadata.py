@@ -18,7 +18,7 @@ def main():
     print(f"Total chunks: {len(chunks)}")
 
     print("\nINDICATOR CHUNKS")
-    print("=" * 100)
+    print("=" * 120)
 
     for chunk in chunks:
         if "indicator_number" not in chunk:
@@ -27,9 +27,36 @@ def main():
         print(
             f"{chunk['chunk_id']} | "
             f"page={chunk['page_number']} | "
+            f"type={chunk.get('section_type')} | "
             f"indicator={chunk['indicator_number']} | "
             f"{chunk['subdomain']} | "
             f"{chunk['indicator_name']}"
+        )
+
+    print("\nTAXONOMY CHUNKS")
+    print("=" * 120)
+
+    for chunk in chunks:
+        if chunk.get("section_type") != "taxonomy":
+            continue
+
+        print(
+            f"{chunk['chunk_id']} | "
+            f"page={chunk['page_number']} | "
+            f"type={chunk['section_type']}"
+        )
+
+    print("\nOTHER CHUNKS")
+    print("=" * 120)
+
+    for chunk in chunks:
+        if chunk.get("section_type") != "other":
+            continue
+
+        print(
+            f"{chunk['chunk_id']} | "
+            f"page={chunk['page_number']} | "
+            f"type={chunk['section_type']}"
         )
 
 

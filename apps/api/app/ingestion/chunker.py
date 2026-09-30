@@ -2,7 +2,9 @@ import re
 from app.ingestion.metadata import (
     get_indicator_for_page,
     get_indicator_metadata,
+    get_section_type,
 )
+
 
 def split_into_paragraphs(text: str) -> list[str]:
     """
@@ -121,10 +123,18 @@ def create_chunks(
         # Determine document metadata for this page.
         indicator_number = get_indicator_for_page(page["page_number"])
 
-        metadata = {}
+        section_type = get_section_type(
+            page["page_number"]
+        )
+
+        metadata = {
+            "section_type": section_type,
+        }
 
         if indicator_number is not None:
-            metadata = get_indicator_metadata(indicator_number)
+            metadata.update(
+                get_indicator_metadata(indicator_number)
+            )
 
         page_chunks = chunk_text(
             page["text"],
@@ -145,7 +155,7 @@ def create_chunks(
                     "text": text,
                 }
             )
-            
+
             chunk_id += 1
 
     return chunks
