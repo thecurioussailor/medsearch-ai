@@ -6,6 +6,8 @@ from app.retrieval.retriever import Retriever
 from app.retrieval.bm25 import BM25Retriever
 from app.retrieval.hybrid import HybridRetriever
 from app.retrieval.metadata_reranker import MetadataReranker
+from app.retrieval.taxonomy import TaxonomyRetriever
+from app.retrieval.framework import FrameworkRetriever
 
 
 class RAGPipeline:
@@ -45,6 +47,15 @@ class RAGPipeline:
             bm25_retriever=self.bm25_retriever,
         )
 
+        self.taxonomy_retriever = TaxonomyRetriever(
+            chunks=self.chunks,
+        )
+
+        self.framework_retriever = FrameworkRetriever(
+            hybrid_retriever=self.hybrid_retriever,
+            taxonomy_retriever=self.taxonomy_retriever,
+        )
+
         self.metadata_reranker = MetadataReranker()
 
         self.generator = Generator()
@@ -62,7 +73,7 @@ class RAGPipeline:
             ]
         )
 
-        retrieved = self.hybrid_retriever.retrieve(
+        retrieved = self.framework_retriever.retrieve(
             query=query,
             chunks=self.chunks,
             vectors=vectors,

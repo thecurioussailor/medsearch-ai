@@ -16,7 +16,7 @@ def main():
         document_id="diabetes",
     )
 
-    question = "What indicator measures diabetes prevalence?"
+    question = "What are the main domains used in the diabetes monitoring framework?"
 
     print("\n" + "=" * 80)
     print("DENSE RETRIEVAL DEBUG")
