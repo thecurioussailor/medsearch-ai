@@ -69,6 +69,24 @@ class RAGPipeline:
             top_k=10,
         )
 
+
+        print("\n" + "=" * 80)
+        print("HYBRID RETRIEVAL DEBUG")
+        print("=" * 80)
+
+        for index, result in enumerate(retrieved, start=1):
+            chunk = result["chunk"]
+
+            print(
+                f"{index}. "
+                f"page={chunk['page_number']} | "
+                f"rrf={result['score']:.4f} | "
+                f"type={chunk.get('section_type')} | "
+                f"indicator={chunk.get('indicator_number')} | "
+                f"{chunk.get('indicator_name', '')}"
+            )
+
+
         reranked = self.metadata_reranker.rerank(
             query=query,
             results=retrieved,

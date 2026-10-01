@@ -3,7 +3,7 @@ class HybridRetriever:
         self,
         dense_retriever,
         bm25_retriever,
-        k: int = 60,
+        k: int = 20,
     ):
         self.dense_retriever = dense_retriever
         self.bm25_retriever = bm25_retriever

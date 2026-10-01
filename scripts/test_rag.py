@@ -16,10 +16,59 @@ def main():
         document_id="diabetes",
     )
 
-    question = (
-        "What is the recommended dosage of metformin "
-        "for adults with diabetes?"
+    question = "What indicator measures diabetes prevalence?"
+
+    print("\n" + "=" * 80)
+    print("DENSE RETRIEVAL DEBUG")
+    print("=" * 80)
+
+    vectors = pipeline.embedder.embed_texts(
+        [
+            chunk["text"]
+            for chunk in pipeline.chunks
+        ]
     )
+
+    dense_results = pipeline.dense_retriever.retrieve(
+        query=question,
+        chunks=pipeline.chunks,
+        vectors=vectors,
+        top_k=15,
+    )
+
+    for index, result in enumerate(dense_results, start=1):
+        chunk = result["chunk"]
+
+        print(
+            f"{index}. "
+            f"page={chunk['page_number']} | "
+            f"score={result['score']:.4f} | "
+            f"type={chunk.get('section_type')} | "
+            f"indicator={chunk.get('indicator_number')} | "
+            f"{chunk.get('indicator_name', '')}"
+        )
+
+
+    print("\n" + "=" * 80)
+    print("BM25 RETRIEVAL DEBUG")
+    print("=" * 80)
+
+    bm25_results = pipeline.bm25_retriever.retrieve(
+        query=question,
+        top_k=15,
+    )
+
+    for index, result in enumerate(bm25_results, start=1):
+        chunk = result["chunk"]
+
+        print(
+            f"{index}. "
+            f"page={chunk['page_number']} | "
+            f"score={result['score']:.4f} | "
+            f"type={chunk.get('section_type')} | "
+            f"indicator={chunk.get('indicator_number')} | "
+            f"{chunk.get('indicator_name', '')}"
+        )
 
     result = pipeline.answer(
         query=question,
