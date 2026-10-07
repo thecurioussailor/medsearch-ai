@@ -3,9 +3,11 @@ class FrameworkRetriever:
         self,
         hybrid_retriever,
         taxonomy_retriever,
+        taxonomy_score: float = 0.08,
     ):
         self.hybrid_retriever = hybrid_retriever
         self.taxonomy_retriever = taxonomy_retriever
+        self.taxonomy_score = taxonomy_score
 
     def _needs_taxonomy(
         self,
@@ -66,6 +68,7 @@ class FrameworkRetriever:
             if chunk_id not in results_by_id:
                 results_by_id[chunk_id] = {
                     **result,
+                    "score": self.taxonomy_score,
                     "retrieval_source": "taxonomy",
                 }
 

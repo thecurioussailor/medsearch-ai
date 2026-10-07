@@ -77,7 +77,7 @@ class RAGPipeline:
             query=query,
             chunks=self.chunks,
             vectors=vectors,
-            top_k=10,
+            top_k=20,
         )
 
 
