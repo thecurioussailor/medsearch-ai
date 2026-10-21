@@ -2,6 +2,7 @@ from app.generation.generator import Generator
 from app.ingestion.loader import load_pdf
 from app.ingestion.chunker import create_chunks
 from app.embeddings.embedder import Embedder
+from app.vectorstore.qdrant_store import QdrantStore
 from app.retrieval.retriever import Retriever
 from app.retrieval.bm25 import BM25Retriever
 from app.retrieval.hybrid import HybridRetriever
@@ -34,8 +35,11 @@ class RAGPipeline:
 
         self.embedder = Embedder()
 
+        self.vector_store = QdrantStore()
+
         self.dense_retriever = Retriever(
             embedder=self.embedder,
+            vector_store=self.vector_store,
         )
 
         self.bm25_retriever = BM25Retriever(
@@ -66,17 +70,10 @@ class RAGPipeline:
         top_k: int = 5,
     ) -> str:
 
-        vectors = self.embedder.embed_texts(
-            [
-                chunk["text"]
-                for chunk in self.chunks
-            ]
-        )
-
         retrieved = self.framework_retriever.retrieve(
             query=query,
             chunks=self.chunks,
-            vectors=vectors,
+            vectors=None,
             top_k=20,
         )
 
@@ -133,4 +130,6 @@ class RAGPipeline:
             "answer": generation["answer"],
             "citations": verified_citations,
             "sources": reranked,
+            "retrieval_candidates": retrieved,
+            "reranked_sources": reranked,
         }

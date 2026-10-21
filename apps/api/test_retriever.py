@@ -2,6 +2,7 @@ from app.ingestion.loader import load_pdf
 from app.ingestion.chunker import create_chunks
 from app.embeddings.embedder import Embedder
 from app.retrieval.retriever import Retriever
+from app.vectorstore.qdrant_store import QdrantStore
 
 
 PDF_PATH = "../../data/raw/diabetes_monitoring_guidance.pdf"
@@ -22,7 +23,7 @@ texts = [chunk["text"] for chunk in chunks]
 
 vectors = embedder.embed_texts(texts)
 
-retriever = Retriever(embedder)
+retriever = Retriever(embedder, QdrantStore())
 
 
 queries = [
