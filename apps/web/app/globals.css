@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+/* Light-only research palette.
+   "only light" also opts out of browser auto-dark modes (e.g. Chrome's),
+   which would otherwise invert the page and turn borders into bright outlines. */
+:root {
+  color-scheme: only light;
+  --canvas: #fafaf8;
+  --surface: #ffffff;
+  --ink: #181c1b;
+  --muted: #5b6361;
+  --line: #e4e4df;
+  --accent: #0f766e;
+  --accent-strong: #115e59;
+  --accent-soft: #eef6f4;
+  --danger: #b42318;
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+}
